@@ -90,7 +90,7 @@ fun OverviewChartCard() {
                     contentBuilder = {
                         it.format(0)
                     },
-                    containerColor = Color.White
+                    containerColor = MaterialTheme.colorScheme.background,
                 ),
                 indicatorProperties = HorizontalIndicatorProperties(
                     textStyle = MaterialTheme.typography.labelSmall,
