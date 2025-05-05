@@ -31,7 +31,7 @@ fun MainScreen() {
         ) { page ->
             when (page) {
                 0 -> HomeScreen(it)
-                1 -> ProfileScreen()
+                1 -> ProfileScreen(it)
             }
         }
     }
