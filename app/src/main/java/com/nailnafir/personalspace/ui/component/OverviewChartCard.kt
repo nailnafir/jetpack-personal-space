@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -54,7 +53,7 @@ fun OverviewChartCard() {
 
     Card(
         modifier = Modifier.padding(bottom = xs),
-        shape = RoundedCornerShape(md),
+        shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(xs / 2),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
     ) {
@@ -86,23 +85,23 @@ fun OverviewChartCard() {
                 gridProperties = GridProperties(enabled = false),
                 dividerProperties = DividerProperties(enabled = false),
                 popupProperties = PopupProperties(
-                    textStyle = MaterialTheme.typography.labelSmall,
+                    textStyle = MaterialTheme.typography.labelMedium,
                     contentBuilder = {
                         it.format(0)
                     },
                     containerColor = MaterialTheme.colorScheme.background,
                 ),
                 indicatorProperties = HorizontalIndicatorProperties(
-                    textStyle = MaterialTheme.typography.labelSmall,
+                    textStyle = MaterialTheme.typography.labelMedium,
                     contentBuilder = {
                         it.format(0)
                     },
                 ),
-                labelHelperProperties = LabelHelperProperties(textStyle = MaterialTheme.typography.labelSmall),
+                labelHelperProperties = LabelHelperProperties(textStyle = MaterialTheme.typography.labelMedium),
                 labelProperties = LabelProperties(
                     enabled = true,
                     labels = chartLabelHorizontal,
-                    textStyle = MaterialTheme.typography.labelSmall
+                    textStyle = MaterialTheme.typography.labelMedium
                 )
             )
         }

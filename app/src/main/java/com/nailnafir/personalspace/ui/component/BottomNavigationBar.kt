@@ -13,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.nailnafir.personalspace.data.BottomNavigationItem.Companion.Items
 
-
 @Composable
 fun BottomNavigationBar(
     selectedIndex: Int,
@@ -22,7 +21,7 @@ fun BottomNavigationBar(
     NavigationBar(
         modifier = Modifier.border(
             width = 1.dp,
-            color = MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.1f)
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f)
         ),
         containerColor = MaterialTheme.colorScheme.background,
     ) {
@@ -39,8 +38,9 @@ fun BottomNavigationBar(
                 label = {
                     Text(
                         item.label,
-                        fontSize = MaterialTheme.typography.labelLarge.fontSize,
-                        fontWeight = if (index == selectedIndex) FontWeight.Bold else FontWeight.Normal
+                        style = MaterialTheme.typography.labelLarge.copy(
+                            fontWeight = if (index == selectedIndex) FontWeight.Bold else FontWeight.Normal
+                        ),
                     )
                 },
                 colors = NavigationBarItemDefaults.colors(

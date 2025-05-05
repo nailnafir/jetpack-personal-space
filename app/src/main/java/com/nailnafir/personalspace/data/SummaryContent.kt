@@ -1,6 +1,10 @@
 package com.nailnafir.personalspace.data
 
 import android.annotation.SuppressLint
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.ui.graphics.vector.ImageVector
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -102,4 +106,26 @@ val summaryContent = listOf(
         subtitle = "Selamat menempuh hidup baru yaaa",
         date = sdf.parse("2023-09-09")!!
     ),
+)
+
+data class SummaryContentDropdownItem(
+    val icon: ImageVector,
+    val title: String,
+    val subtitle: String,
+    val onClick: () -> Unit,
+)
+
+val summaryContentDropdown = listOf(
+    SummaryContentDropdownItem(
+        icon = Icons.Default.Edit,
+        title = "Ubah",
+        subtitle = "Ubah informasi",
+        onClick = {  }
+    ),
+    SummaryContentDropdownItem(
+        icon = Icons.Default.Delete,
+        title = "Hapus",
+        subtitle = "Hapus permanen",
+        onClick = {  }
+    )
 )

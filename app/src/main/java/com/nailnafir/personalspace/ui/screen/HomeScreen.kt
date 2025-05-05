@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +43,7 @@ import com.nailnafir.personalspace.ui.component.OverviewChartCard
 import com.nailnafir.personalspace.ui.component.SearchBar
 import com.nailnafir.personalspace.ui.component.SummaryContentCard
 import com.nailnafir.personalspace.ui.component.SummaryFilterChip
+import com.nailnafir.personalspace.ui.component.TopNavigationBar
 import com.nailnafir.personalspace.ui.theme.lg
 import com.nailnafir.personalspace.ui.theme.md
 import com.nailnafir.personalspace.ui.theme.sm
@@ -50,11 +52,13 @@ import com.nailnafir.personalspace.ui.theme.xs
 @SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(paddingValues: PaddingValues) {
     val scaffoldSheetState = rememberBottomSheetScaffoldState()
 
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     val sheetPeekHeight = screenHeight / 3
+
+    val topPadding = paddingValues.calculateTopPadding()
 
     var selectedIndex by remember { mutableIntStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
@@ -76,7 +80,7 @@ fun HomeScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = sm, horizontal = xs * 3)
-                    .height(screenHeight - (sm * 6)),
+                    .height(screenHeight - topPadding - lg),
                 verticalArrangement = Arrangement.Top,
             ) {
                 SearchBar(
@@ -115,6 +119,9 @@ fun HomeScreen() {
                 }
             }
         },
+        topBar = {
+            TopNavigationBar()
+        }
     ) {
         Column(
             modifier = Modifier
