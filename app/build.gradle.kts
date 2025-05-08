@@ -55,6 +55,9 @@ dependencies {
     // Chart
     implementation(libs.compose.charts)
 
+    // Image
+    implementation(libs.coil.compose)
+
     // Unit Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

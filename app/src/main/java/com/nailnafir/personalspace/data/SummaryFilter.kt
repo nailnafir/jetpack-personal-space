@@ -12,14 +12,18 @@ val summaryFilter = listOf(
     ),
     SummaryFilterItem(
         label = "Tugas",
-        count = summaryContent.count { it.type == SummaryContentType.TUGAS },
+        count = summaryContent.count { it.type == SummaryContentType.TASK },
     ),
     SummaryFilterItem(
         label = "Pekerjaan",
-        count = summaryContent.count { it.type == SummaryContentType.PEKERJAAN },
+        count = summaryContent.count { it.type == SummaryContentType.WORK },
     ),
     SummaryFilterItem(
-        label = "Kontak",
-        count = summaryContent.count { it.type == SummaryContentType.KONTAK },
+        label = "Pesan",
+        count = summaryContent.count { it.type == SummaryContentType.MESSAGE },
+    ),
+    SummaryFilterItem(
+        label = "Blog",
+        count = summaryContent.count { it.type == SummaryContentType.BLOG },
     ),
 )

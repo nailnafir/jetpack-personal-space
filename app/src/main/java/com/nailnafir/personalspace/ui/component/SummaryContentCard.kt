@@ -1,10 +1,14 @@
 package com.nailnafir.personalspace.ui.component
 
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Icon
@@ -31,58 +36,129 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.nailnafir.personalspace.data.SummaryContentType
 import com.nailnafir.personalspace.data.summaryContentDropdown
-import com.nailnafir.personalspace.ui.theme.lg
 import com.nailnafir.personalspace.ui.theme.md
+import com.nailnafir.personalspace.ui.theme.sm
 import com.nailnafir.personalspace.ui.theme.xs
 import com.nailnafir.personalspace.utility.formatDateIndonesian
+import com.nailnafir.personalspace.utility.isMoreThan7DaysFromNow
 import java.util.Date
 
 @Composable
 fun SummaryContentCard(
-    percentage: Int? = null,
-    like: Int? = null,
+    percentageCount: Int? = null,
+    likeCount: Int? = null,
+    readCount: Int? = null,
     type: SummaryContentType,
     title: String,
     subtitle: String,
     date: Date,
 ) {
+    val context = LocalContext.current
+
     var expanded by remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier.padding(bottom = xs),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp),
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(xs / 2),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
     ) {
-        Column(
-            modifier = Modifier.padding(md),
-        ) {
+        Box {
+            if (!date.isMoreThan7DaysFromNow()) Box(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.error)
+                    .shimmerLoader()
+                    .padding(
+                        vertical = xs,
+                        horizontal = sm,
+                    )
+            ) {
+                Text(
+                    text = "BARU",
+                    color = MaterialTheme.colorScheme.onError,
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+            }
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(md),
                 verticalAlignment = Alignment.Top,
             ) {
-                Column {
+                AsyncImage(
+                    model = "https://picsum.photos/120",
+                    contentDescription = "Gambar",
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(100.dp)
+                        .clip(MaterialTheme.shapes.large)
+                )
+                Spacer(modifier = Modifier.width(sm))
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.labelMedium
-                    )
-                    Box(modifier = Modifier.height(xs))
-                    Text(
-                        text = subtitle,
-                        style = MaterialTheme.typography.labelMedium.copy(
-                            fontWeight = FontWeight.Light,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                     )
+                    Spacer(modifier = Modifier.height(xs))
+                    Text(
+                        text = subtitle,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(
+                                alpha = 0.5f
+                            ),
+                        )
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Tanggal",
+                            modifier = Modifier.size(md),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                        Spacer(modifier = Modifier.width(xs))
+                        Text(
+                            text = formatDateIndonesian(
+                                date = date,
+                                format = "dd MMMM yyyy",
+                            ),
+                            style = MaterialTheme.typography.titleSmall.copy(
+                                fontWeight = FontWeight.Light,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            )
+                        )
+                    }
                 }
-                Box(
-                    modifier = Modifier.padding(xs)
+                Spacer(modifier = Modifier.width(sm))
+                Column (
+                    horizontalAlignment = Alignment.End
                 ) {
                     Icon(
                         imageVector = Icons.Default.Menu,
@@ -103,13 +179,17 @@ fun SummaryContentCard(
                         summaryContentDropdown.forEach {
                             DropdownMenuItem(
                                 colors = MenuDefaults.itemColors(
-                                    textColor = if (it.title.uppercase().contains("HAPUS")) Color.Red else Color.Unspecified,
-                                    leadingIconColor = if (it.title.uppercase().contains("HAPUS")) Color.Red else Color.Unspecified
+                                    textColor = if (it.title.uppercase().contains("HAPUS"))
+                                        MaterialTheme.colorScheme.error
+                                    else MaterialTheme.colorScheme.onBackground,
+                                    leadingIconColor = if (it.title.uppercase().contains("HAPUS"))
+                                        MaterialTheme.colorScheme.error
+                                    else MaterialTheme.colorScheme.onBackground,
                                 ),
                                 leadingIcon = {
                                     Icon(
                                         imageVector = it.icon,
-                                        contentDescription = "Ubah",
+                                        contentDescription = it.title,
                                         modifier = Modifier.size(md),
                                     )
                                 },
@@ -129,79 +209,71 @@ fun SummaryContentCard(
                                         )
                                     }
                                 },
-                                onClick = it.onClick
+                                onClick = {
+                                    Toast.makeText(context, "${it.title} $title", Toast.LENGTH_SHORT).show()
+                                }
                             )
                         }
                     }
-                }
-            }
-            Box(modifier = Modifier.height(lg))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Bottom,
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = "Tanggal",
-                        modifier = Modifier.size(md)
-                    )
-                    Box(modifier = Modifier.width(xs))
-                    Text(
-                        text = formatDateIndonesian(
-                            date = date,
-                            format = "dd MMMM yyyy",
-                        ),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Light,
-                        )
-                    )
-                }
-                if (type == SummaryContentType.KONTAK && like != null) {
+                    Spacer(modifier = Modifier.weight(1f))
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.ThumbUp,
-                            contentDescription = "Suka",
-                            modifier = Modifier.size(md)
-                        )
-                        Box(modifier = Modifier.width(xs))
-                        Text(
-                            text = "$like",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Light,
+                        if (type == SummaryContentType.BLOG && readCount != null) {
+                            Icon(
+                                imageVector = Icons.Default.Info,
+                                contentDescription = "Baca",
+                                modifier = Modifier.size(md),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
-                        )
-                    }
-                }
-                if (type != SummaryContentType.KONTAK && percentage != null) {
-                    val progress = percentage / 100f
-                    val progressColor = when {
-                        percentage >= 80 -> Color.Green
-                        percentage >= 50 -> Color.Yellow
-                        else -> Color.Red
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        CircularProgressIndicator(
-                            progress = { progress },
-                            modifier = Modifier.size(md),
-                            color = progressColor,
-                            strokeWidth = xs,
-                            trackColor = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
-                        )
-                        Box(modifier = Modifier.width(xs))
-                        Text(
-                            text = "$percentage%",
-                            style = MaterialTheme.typography.labelSmall.copy(
-                                fontWeight = FontWeight.Light,
+                            Spacer(modifier = Modifier.width(xs))
+                            Text(
+                                text = "$readCount",
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    fontWeight = FontWeight.Light,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                )
                             )
-                        )
+                        }
+                        if (type == SummaryContentType.MESSAGE && likeCount != null) {
+                            Icon(
+                                imageVector = Icons.Default.ThumbUp,
+                                contentDescription = "Suka",
+                                modifier = Modifier.size(md),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            )
+                            Spacer(modifier = Modifier.width(xs))
+                            Text(
+                                text = "$likeCount",
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    fontWeight = FontWeight.Light,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                )
+                            )
+                        }
+                        if (type != SummaryContentType.MESSAGE && percentageCount != null) {
+                            val progress = percentageCount / 100f
+                            val progressColor = when {
+                                percentageCount >= 80 -> Color.Green
+                                percentageCount >= 50 -> Color.Yellow
+                                else -> Color.Red
+                            }
+                            CircularProgressIndicator(
+                                progress = { progress },
+                                modifier = Modifier.size(md),
+                                color = progressColor,
+                                strokeWidth = xs,
+                                trackColor = ProgressIndicatorDefaults.circularIndeterminateTrackColor,
+                            )
+                            Spacer(modifier = Modifier.width(xs))
+                            Text(
+                                text = "$percentageCount%",
+                                style = MaterialTheme.typography.titleSmall.copy(
+                                    fontWeight = FontWeight.Light,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                )
+                            )
+                        }
                     }
                 }
             }

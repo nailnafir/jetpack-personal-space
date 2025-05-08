@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.nailnafir.personalspace.ui.theme.xs
 
 @Composable
@@ -37,11 +38,12 @@ fun SummaryFilterChip(
             )
         },
         colors = FilterChipDefaults.elevatedFilterChipColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            selectedContainerColor = MaterialTheme.colorScheme.primary,
-            selectedLabelColor = MaterialTheme.colorScheme.background,
+            containerColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+            labelColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
         shape = MaterialTheme.shapes.large,
-        elevation = FilterChipDefaults.filterChipElevation(xs / 2),
+        elevation = FilterChipDefaults.filterChipElevation(if (selected) xs / 2 else 0.dp),
     )
 }

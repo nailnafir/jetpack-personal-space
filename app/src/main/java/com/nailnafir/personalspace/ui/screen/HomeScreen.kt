@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.vectorResource
@@ -47,6 +46,7 @@ import com.nailnafir.personalspace.ui.component.TopNavigationBar
 import com.nailnafir.personalspace.ui.theme.lg
 import com.nailnafir.personalspace.ui.theme.md
 import com.nailnafir.personalspace.ui.theme.sm
+import com.nailnafir.personalspace.ui.theme.xl
 import com.nailnafir.personalspace.ui.theme.xs
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -56,31 +56,47 @@ fun HomeScreen(paddingValues: PaddingValues) {
     val scaffoldSheetState = rememberBottomSheetScaffoldState()
 
     val screenHeight = LocalConfiguration.current.screenHeightDp.dp
-    val sheetPeekHeight = screenHeight / 3
-
-    val topPadding = paddingValues.calculateTopPadding()
 
     var selectedIndex by remember { mutableIntStateOf(0) }
     var searchQuery by remember { mutableStateOf("") }
 
-    val filteredContent = when (summaryFilter[selectedIndex].label) {
-        "Tugas" -> summaryContent.filter { it.type == SummaryContentType.TUGAS }
-        "Pekerjaan" -> summaryContent.filter { it.type == SummaryContentType.PEKERJAAN }
-        "Kontak" -> summaryContent.filter { it.type == SummaryContentType.KONTAK }
+    val categoryFilteredContent = when (summaryFilter[selectedIndex].label) {
+        "Tugas" -> summaryContent.filter { it.type == SummaryContentType.TASK }
+        "Pekerjaan" -> summaryContent.filter { it.type == SummaryContentType.WORK }
+        "Pesan" -> summaryContent.filter { it.type == SummaryContentType.MESSAGE }
+        "Blog" -> summaryContent.filter { it.type == SummaryContentType.BLOG }
         else -> summaryContent
+    }
+
+    val filteredContent = if (searchQuery.isBlank()) {
+        categoryFilteredContent
+    } else {
+        categoryFilteredContent.filter {
+            it.title.contains(
+                searchQuery,
+                ignoreCase = true
+            ) || it.subtitle.contains(
+                searchQuery,
+                ignoreCase = true
+            )
+        }
     }
 
     BottomSheetScaffold(
         scaffoldState = scaffoldSheetState,
-        sheetPeekHeight = sheetPeekHeight,
+        sheetPeekHeight = screenHeight - 200.dp - 120.dp - (xl * 4),
         sheetContainerColor = MaterialTheme.colorScheme.background,
         sheetShadowElevation = sm,
         sheetContent = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = sm, horizontal = xs * 3)
-                    .height(screenHeight - topPadding - lg),
+                    .padding(
+                        bottom = paddingValues.calculateBottomPadding(),
+                        start = xs * 3,
+                        end = xs * 3,
+                    )
+                    .height(screenHeight),
                 verticalArrangement = Arrangement.Top,
             ) {
                 SearchBar(
@@ -108,13 +124,17 @@ fun HomeScreen(paddingValues: PaddingValues) {
                 ) {
                     columnItems(filteredContent) {
                         SummaryContentCard(
-                            percentage = it.percentage,
-                            like = it.like,
+                            percentageCount = it.percentageCount,
+                            likeCount = it.likeCount,
+                            readCount = it.readCount,
                             type = it.type,
                             title = it.title,
                             subtitle = it.subtitle,
                             date = it.date,
                         )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(xs))
                     }
                 }
             }
@@ -126,12 +146,13 @@ fun HomeScreen(paddingValues: PaddingValues) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    MaterialTheme.colorScheme.background
-                        .copy(alpha = 0.85f)
-                        .compositeOver(MaterialTheme.colorScheme.primary),
-                )
-                .padding(xs * 3),
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(
+                    bottom = paddingValues.calculateBottomPadding(),
+                    top = xs * 3,
+                    start = xs * 3,
+                    end = xs * 3,
+                ),
         ) {
             OverviewChartCard()
             Spacer(modifier = Modifier.height(xs * 3))

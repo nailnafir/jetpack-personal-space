@@ -55,7 +55,9 @@ fun OverviewChartCard() {
         modifier = Modifier.padding(bottom = xs),
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(xs / 2),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -63,7 +65,7 @@ fun OverviewChartCard() {
             modifier = Modifier.padding(md)
         ) {
             LineChart(
-                modifier = Modifier.height(180.dp),
+                modifier = Modifier.height(200.dp),
                 dotsProperties = DotProperties(
                     enabled = true,
                     color = SolidColor(MaterialTheme.colorScheme.primary),

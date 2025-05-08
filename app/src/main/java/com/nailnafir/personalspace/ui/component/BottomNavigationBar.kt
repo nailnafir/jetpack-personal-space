@@ -45,7 +45,7 @@ fun BottomNavigationBar(
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
-                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+                    indicatorColor = MaterialTheme.colorScheme.primaryContainer,
                 )
             )
         }

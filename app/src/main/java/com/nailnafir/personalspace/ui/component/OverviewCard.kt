@@ -1,7 +1,8 @@
 package com.nailnafir.personalspace.ui.component
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,15 +30,21 @@ fun OverviewCard(
     icon: ImageVector,
 ) {
     Card(
-        modifier = Modifier.padding(bottom = xs),
+        modifier = Modifier
+            .padding(bottom = xs)
+            .height(120.dp),
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(xs / 2),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(md)
+                .padding(md),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column {
                 Text(
@@ -54,9 +61,7 @@ fun OverviewCard(
                 imageVector = icon,
                 contentDescription = "Icon $title",
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .size(50.dp)
+                modifier = Modifier.size(50.dp)
             )
         }
     }
