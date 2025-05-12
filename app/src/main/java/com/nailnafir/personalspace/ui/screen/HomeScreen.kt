@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.items as gridItems
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,7 +46,6 @@ import com.nailnafir.personalspace.ui.component.TopNavigationBar
 import com.nailnafir.personalspace.ui.theme.lg
 import com.nailnafir.personalspace.ui.theme.md
 import com.nailnafir.personalspace.ui.theme.sm
-import com.nailnafir.personalspace.ui.theme.xl
 import com.nailnafir.personalspace.ui.theme.xs
 
 @SuppressLint("ConfigurationScreenWidthHeight")
@@ -84,19 +83,18 @@ fun HomeScreen(paddingValues: PaddingValues) {
 
     BottomSheetScaffold(
         scaffoldState = scaffoldSheetState,
-        sheetPeekHeight = screenHeight - 200.dp - 120.dp - (xl * 4),
+        sheetPeekHeight = screenHeight - paddingValues.calculateTopPadding() - TopAppBarDefaults.TopAppBarExpandedHeight
+                - 200.dp - 120.dp - (sm * 10),
         sheetContainerColor = MaterialTheme.colorScheme.background,
         sheetShadowElevation = sm,
         sheetContent = {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(
                         bottom = paddingValues.calculateBottomPadding(),
                         start = xs * 3,
                         end = xs * 3,
-                    )
-                    .height(screenHeight),
+                    ),
                 verticalArrangement = Arrangement.Top,
             ) {
                 SearchBar(
@@ -145,7 +143,7 @@ fun HomeScreen(paddingValues: PaddingValues) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primary)
                 .padding(
                     bottom = paddingValues.calculateBottomPadding(),

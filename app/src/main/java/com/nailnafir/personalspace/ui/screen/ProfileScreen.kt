@@ -60,7 +60,8 @@ fun ProfileScreen(paddingValues: PaddingValues) {
 
     BottomSheetScaffold(
         scaffoldState = scaffoldSheetState,
-        sheetPeekHeight = screenHeight - (180.dp * 2) + md,
+        sheetPeekHeight = screenHeight - paddingValues.calculateTopPadding()
+                - 180.dp - 150.dp - sm,
         sheetContainerColor = MaterialTheme.colorScheme.background,
         sheetShadowElevation = sm,
         sheetContent = {
@@ -267,6 +268,9 @@ fun ProfileScreen(paddingValues: PaddingValues) {
                     )
                     Spacer(modifier = Modifier.height(sm))
                     Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = xs * 3),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
